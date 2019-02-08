@@ -7,11 +7,19 @@ import ua.com.juja.sqlcmd.view.Console;
 import ua.com.juja.sqlcmd.view.View;
 
 public class MainController {
+    private DatabaseManager manager;
+    private View view;
 
-    public static void main(String[] args) {
-        View view = new Console();
-        DatabaseManager manager = new JDBCDatabaseManager();
+    public MainController(View view, DatabaseManager manager) {
+        this.view = view;
+        this.manager = manager;
+    }
 
+    public void run() {
+        connectToDb();
+    }
+
+    private void connectToDb() {
         view.write("Привет, юзер!");
         view.write("Введи, пожалуйста, имя базы данных, имя пользователя и пароль в формате: database|userName|password");
         while (true) {
