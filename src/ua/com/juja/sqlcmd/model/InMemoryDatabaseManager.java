@@ -14,8 +14,8 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     }
 
     private void validateTable(String tableName) {
-        if (!"users".equals(tableName)){
-            throw new UnsupportedOperationException("Only for 'users' table, but you try to work with: " +tableName);
+        if (!"users".equals(tableName)) {
+            throw new UnsupportedOperationException("Only for 'users' table, but you try to work with: " + tableName);
         }
     }
 
@@ -52,5 +52,10 @@ public class InMemoryDatabaseManager implements DatabaseManager {
                 data[index].updateFrom(newValue);
             }
         }
+    }
+
+    @Override
+    public String[] getTableColumns(String tableName) {
+        return new String[]{"name", "password", "id"};
     }
 }
