@@ -1,13 +1,8 @@
 package ua.com.juja.sqlcmd.controller;
 
-import ua.com.juja.sqlcmd.controller.command.Command;
-import ua.com.juja.sqlcmd.controller.command.Exit;
-import ua.com.juja.sqlcmd.controller.command.Help;
-import ua.com.juja.sqlcmd.model.DataSet;
+import ua.com.juja.sqlcmd.controller.command.*;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
-
-import java.util.Arrays;
 
 public class MainController {
     private Command[] commands;
