@@ -12,7 +12,7 @@ public class MainController {
     public MainController(View view, DatabaseManager manager) {
         this.view = view;
         this.manager = manager;
-        this.commands = new Command[]{new Exit(view), new Help(view), new List(manager, view), new Find(manager, view)};
+        this.commands = new Command[]{new Exit(view), new Help(view), new List(manager, view), new Find(manager, view), new Unsupported(view)};
     }
 
     public void run() {
@@ -20,17 +20,13 @@ public class MainController {
 
         while (true) {
             view.write("Введи команду (или help для помощи):");
-            String command = view.read();
-            if (commands[2].canProcess(command)) {
-                commands[2].process(command);
-            } else if (commands[1].canProcess(command)) {
-                commands[1].process(command);
-            } else if (commands[0].canProcess(command)) {
-                commands[0].process(command);
-            } else if (commands[3].canProcess(command)) {
-                commands[3].process(command);
-            } else {
-                view.write("Несуществующая команда: " + command);
+            String input = view.read();
+
+            for (Command command : commands) {
+                if (command.canProcess(input)) {
+                    command.process(input);
+                    break;
+                }
             }
         }
     }
