@@ -3,7 +3,7 @@ package ua.com.juja.sqlcmd.model;
 import java.util.Arrays;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
-    public static final String TABLE_NAME = "news, users";
+    public static final String TABLE_NAME = "news, users, test";//TODO
     private DataSet[] data = new DataSet[1000];
     private int freeIndex = 0;
 

@@ -12,9 +12,9 @@ public class MainController {
         this.view = view;
         this.commands = new Command[]{
                 new Connect(manager, view),
-                new IsConnected(manager, view),
                 new Exit(view),
                 new Help(view),
+                new IsConnected(manager, view),
                 new List(manager, view),
                 new Find(manager, view),
                 new Unsupported(view)};
@@ -26,6 +26,9 @@ public class MainController {
 
         while (true) {
             String input = view.read();
+            if (input == null) {
+                new Exit(view).process(input);
+            }
 
             for (Command command : commands) {
                 if (command.canProcess(input)) {

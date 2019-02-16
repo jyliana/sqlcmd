@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 public abstract class DatabaseManagerTest {
 
@@ -22,7 +23,7 @@ public abstract class DatabaseManagerTest {
     @Test
     public void testGetAllTablesNames() {
         String[] tablesNames = manager.getTablesNames();
-        assertEquals("[news, users]", Arrays.toString(tablesNames));
+        assertEquals("[news, users, test]", Arrays.toString(tablesNames));
     }
 
     @Test
@@ -82,5 +83,13 @@ public abstract class DatabaseManagerTest {
 
         //then
         assertEquals("[name, password, id]", Arrays.toString(columnNames));
+    }
+
+    @Test
+    public void testIsConnected() {
+        //given
+        //when
+        //then
+        assertTrue(manager.isConnected());
     }
 }
