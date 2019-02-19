@@ -27,7 +27,7 @@ public class Connect implements Command {
             if (data.length != count()) {
                 throw new IllegalArgumentException(
                         String.format("Неверное количество параметров, разделенных " +
-                                "знаком |, ожидается %s, но есть: %s" +
+                                        "знаком |, ожидается %s, но есть: %s",
                                 count(), data.length));
             }
             String databaseName = data[1];

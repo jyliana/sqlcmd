@@ -231,4 +231,23 @@ public class IntegrationTest {
                 "Введи команду (или help для помощи):\r\n" +
                 "До скорой встречи!\r\n", getData());
     }
+
+    @Test
+    public void testConnectWithError() {
+        //given
+        in.add("connect|sqlcmd");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет, юзер!\r\n" +
+                "Введи, пожалуйста, имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
+                // connect with error
+                "Неудача по причине: Неверное количество параметров, разделенных знаком |, ожидается 4, но есть: 2\r\n" +
+                "Повторите попытку.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                "До скорой встречи!\r\n", getData());
+    }
 }
