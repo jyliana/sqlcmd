@@ -3,6 +3,8 @@ package ua.com.juja.sqlcmd.integration;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.controller.Main;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -15,6 +17,7 @@ public class IntegrationTest {
 
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
+    private DatabaseManager databaseManager = new JDBCDatabaseManager();
 
     @Before
     public void setup() {
@@ -53,6 +56,10 @@ public class IntegrationTest {
                 "\t\tдля подключения к базе данных, с которой будем работать\r\n" +
                 "\tlist\r\n" +
                 "\t\tдля получения списка всех таблиц базы, к которой подключились\r\n" +
+                "\tclear|tableName\r\n" +
+                "\t\tдля очистки всей таблицы\r\n" +
+                "\tcreate|tableName|column1|value1|column2|value2|... |columnN|valueN|\r\n" +
+                "\t\tдля создания записи в таблице\r\n" +
                 "\tfind|tableName\r\n" +
                 "\t\tдля получения содержимого таблицы 'tableName'\r\n" +
                 "\thelp\r\n" +
@@ -248,6 +255,60 @@ public class IntegrationTest {
                 "Неудача по причине: Неверное количество параметров, разделенных знаком |, ожидается 4, но есть: 2\r\n" +
                 "Повторите попытку.\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
+                "До скорой встречи!\r\n", getData());
+    }
+
+    @Test
+    public void testFindAfterConnectWithData() {
+        //given
+//        databaseManager.connect("sqlcmd", "postgres", "123456");
+//        databaseManager.clear("users");
+//        DataSet user = new DataSet();
+//        user.put("id", 1);
+//        user.put("name", "Stiven");
+//        user.put("password", "****");
+//        databaseManager.create("users", user);
+//
+//        DataSet user2 = new DataSet();
+//        user2.put("id", 2);
+//        user2.put("name", "Eva");
+//        user2.put("password", "++++");
+//        databaseManager.create("users", user2);
+
+        in.add("connect|sqlcmd|postgres|123456");
+        in.add("clear|users");
+        in.add("create|users|id|1|name|Stiven|password|****");
+        in.add("create|users|id|2|name|Eva|password|++++");
+        in.add("find|users");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет, юзер!\r\n" +
+                "Введи, пожалуйста, имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
+                // connect
+                "Успешно подключились.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // clear|test
+                "Таблица users была успешно очищена\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // create|users|id|1|name|Stiven|password|****
+                "Запись {names:[id, name, password], values:[1, Stiven, ****]} в 'users' была успешно создана\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // create|users|id|2|name|Eva|password|++++
+                "Запись {names:[id, name, password], values:[2, Eva, ++++]} в 'users' была успешно создана\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // find|users
+                "--------------------------\r\n" +
+                " | name | password | id | \r\n" +
+                "--------------------------\r\n" +
+                " | Stiven | **** | 1 | \r\n" +
+                " | Eva | ++++ | 2 | \r\n" +
+                "--------------------------\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // exit
                 "До скорой встречи!\r\n", getData());
     }
 }
