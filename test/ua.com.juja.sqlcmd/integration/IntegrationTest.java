@@ -311,4 +311,52 @@ public class IntegrationTest {
                 // exit
                 "До скорой встречи!\r\n", getData());
     }
+
+    @Test
+    public void testClearWithError() {
+        //given
+        in.add("connect|sqlcmd|postgres|123456");
+        in.add("clear|");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет, юзер!\r\n" +
+                "Введи, пожалуйста, имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
+                // connect
+                "Успешно подключились.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // clear|test
+                "Неудача по причине: Формат команды 'clear|tableName', а получено clear|\r\n" +
+                "Повторите попытку.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // exit
+                "До скорой встречи!\r\n", getData());
+    }
+
+    @Test
+    public void testCreateWithErrors() {
+        //given
+        in.add("connect|sqlcmd|postgres|123456");
+        in.add("create|user|error");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Привет, юзер!\r\n" +
+                "Введи, пожалуйста, имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
+                // connect
+                "Успешно подключились.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // clear|test
+                "Неудача по причине: Должно быть четное количество параметров в формате 'create|tableName|column1|value1|column2|value2|... |columnN|valueN|', а получено 'create|user|error'\r\n" +
+                "Повторите попытку.\r\n" +
+                "Введи команду (или help для помощи):\r\n" +
+                // exit
+                "До скорой встречи!\r\n", getData());
+    }
 }
