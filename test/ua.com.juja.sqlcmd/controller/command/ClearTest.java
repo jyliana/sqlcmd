@@ -1,23 +1,30 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
+import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
 
 public class ClearTest {
+
     private View view;
     private DatabaseManager manager;
     private Command command;
 
     @Before
     public void setup() {
-        manager = Mockito.mock(DatabaseManager.class);
-        view = Mockito.mock(View.class);
+        manager = mock(DatabaseManager.class);
+        view = mock(View.class);
         command = new Clear(manager, view);
     }
 
@@ -29,8 +36,8 @@ public class ClearTest {
         command.process("clear|users");
 
         // then
-        Mockito.verify(manager).clear("users");
-        Mockito.verify(view).write("Таблица users была успешно очищена");
+        verify(manager).clear("users");
+        verify(view).write("Таблица users была успешно очищена");
     }
 
     @Test
@@ -64,5 +71,27 @@ public class ClearTest {
 
         // then
         assertFalse(canProcess);
+    }
+
+    @Test
+    public void testValidationErrorParametersIsLessThan2() {
+        // when
+        try {
+            command.canProcess("clear");
+        } catch (IllegalArgumentException e) {
+            // then
+            assertEquals("Формат команды 'clear|tableName', а получено clear", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testValidationErrorParametersIsMoreThan2() {
+        // when
+        try {
+            command.canProcess("clear|users|qwer");
+        } catch (IllegalArgumentException e) {
+            // then
+            assertEquals("Формат команды 'clear|tableName', а получено clear|users|qwer", e.getMessage());
+        }
     }
 }
