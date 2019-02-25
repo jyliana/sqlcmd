@@ -15,17 +15,18 @@ import static org.junit.Assert.assertFalse;
 public class FindTest {
     private View view;
     private DatabaseManager manager;
+    private Command command;
 
     @Before
     public void setup() {
         manager = Mockito.mock(DatabaseManager.class);
         view = Mockito.mock(View.class);
+        command = new Find(manager, view);
     }
 
     @Test
     public void testPrintTableData() {
         // given
-        Command command = new Find(manager, view);
         Mockito.when(manager.getTableColumns("users"))
                 .thenReturn(new String[]{"id", "name", "password"});
 
@@ -47,20 +48,49 @@ public class FindTest {
         command.process("find|users");
 
         // then
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(view, Mockito.atLeastOnce()).write(captor.capture());
-        assertEquals("[--------------------------,  " +
+        shouldPrint("[--------------------------,  " +
                 "| id | name | password | , " +
                 "--------------------------,  " +
                 "| 1 | Stiven | ***** | ,  " +
                 "| 2 | Eva | +++++ | , " +
-                "--------------------------]", captor.getAllValues().toString());
+                "--------------------------]");
+    }
+
+    @Test
+    public void testPrintTableDataWithOneColumn() {
+        // given
+        Mockito.when(manager.getTableColumns("users")).thenReturn(new String[]{"id", "name", "password"});
+
+        DataSet user1 = new DataSet();
+        user1.put("id", 1);
+
+        DataSet user2 = new DataSet();
+        user2.put("id", 2);
+
+        DataSet[] data = new DataSet[]{user1, user2};
+        Mockito.when(manager.getTableData("users")).thenReturn(data);
+
+        // when
+        command.process("find|users");
+
+        // then
+        shouldPrint("[--------------------------,  " +
+                "| id | name | password | , " +
+                "--------------------------,  " +
+                "| 1 | ,  " +
+                "| 2 | , " +
+                "--------------------------]");
+    }
+
+    private void shouldPrint(String expected) {
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(view, Mockito.atLeastOnce()).write(captor.capture());
+        assertEquals(expected, captor.getAllValues().toString());
     }
 
     @Test
     public void testCanProcessFindWithParametersString() {
         //given
-        Command command = new Find(manager, view);
 
         //when
         boolean canProcess = command.canProcess("find|users");
@@ -72,7 +102,6 @@ public class FindTest {
     @Test
     public void testCantProcessFindWithoutParamateresString() {
         // given
-        Command command = new Find(manager, view);
 
         // when
         boolean canProcess = command.canProcess("find");
@@ -84,7 +113,6 @@ public class FindTest {
     @Test
     public void testCantProcessFindQweString() {
         // given
-        Command command = new Find(manager, view);
 
         // when
         boolean canProcess = command.canProcess("qwe|users");
@@ -96,7 +124,6 @@ public class FindTest {
     @Test
     public void testPrintEmptyTableData() {
         // given
-        Command command = new Find(manager, view);
         Mockito.when(manager.getTableColumns("users"))
                 .thenReturn(new String[]{"id", "name", "password"});
 
@@ -108,11 +135,9 @@ public class FindTest {
         command.process("find|users");
 
         // then
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(view, Mockito.atLeastOnce()).write(captor.capture());
-        assertEquals("[--------------------------,  " +
+        shouldPrint("[--------------------------,  " +
                 "| id | name | password | , " +
                 "--------------------------, " +
-                "--------------------------]", captor.getAllValues().toString());
+                "--------------------------]");
     }
 }
