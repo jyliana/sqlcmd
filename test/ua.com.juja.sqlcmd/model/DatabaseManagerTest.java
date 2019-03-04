@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -22,8 +23,8 @@ public abstract class DatabaseManagerTest {
 
     @Test
     public void testGetAllTablesNames() {
-        String[] tablesNames = manager.getTablesNames();
-        assertEquals("[news, users, test]", Arrays.toString(tablesNames));
+        Set<String> tablesNames = manager.getTablesNames();
+        assertEquals("[news, users, test]", tablesNames.toString());
     }
 
     @Test

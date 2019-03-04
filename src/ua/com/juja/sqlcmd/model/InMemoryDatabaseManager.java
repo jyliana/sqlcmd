@@ -1,6 +1,8 @@
 package ua.com.juja.sqlcmd.model;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
     public static final String TABLE_NAME = "news, users, test";//TODO
@@ -20,8 +22,8 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getTablesNames() {
-        return new String[]{TABLE_NAME};
+    public Set<String> getTablesNames() {
+        return new LinkedHashSet<>(Arrays.asList(TABLE_NAME));
     }
 
     @Override
