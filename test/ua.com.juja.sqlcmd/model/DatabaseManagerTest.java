@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
@@ -40,10 +41,10 @@ public abstract class DatabaseManagerTest {
         manager.create("users", input);
 
         //then
-        DataSet[] users = manager.getTableData("users");
-        assertEquals(1, users.length);
+        List<DataSet> users = manager.getTableData("users");
+        assertEquals(1, users.size());
 
-        DataSet user = users[0];
+        DataSet user = users.get(0);
         assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
         assertEquals("[Stiven, Pupkin, 1]", Arrays.toString(user.getValues()));
     }
@@ -66,10 +67,10 @@ public abstract class DatabaseManagerTest {
         manager.update("users", 1, newValue);
 
         //then
-        DataSet[] users = manager.getTableData("users");
-        assertEquals(1, users.length);
+        List<DataSet> users = manager.getTableData("users");
+        assertEquals(1, users.size());
 
-        DataSet user = users[0];
+        DataSet user = users.get(0);
         assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
         assertEquals("[Pup, pass2, 1]", Arrays.toString(user.getValues()));
     }

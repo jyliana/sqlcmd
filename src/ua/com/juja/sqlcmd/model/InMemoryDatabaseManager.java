@@ -1,18 +1,15 @@
 package ua.com.juja.sqlcmd.model;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
     public static final String TABLE_NAME = "news, users, test";//TODO
-    private DataSet[] data = new DataSet[1000];
-    private int freeIndex = 0;
+    private LinkedList<DataSet> data = new LinkedList<>();
 
     @Override
-    public DataSet[] getTableData(String tableName) {
+    public List<DataSet> getTableData(String tableName) {
         validateTable(tableName);
-        return Arrays.copyOf(data, freeIndex);
+        return data;
     }
 
     private void validateTable(String tableName) {
@@ -34,24 +31,20 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     @Override
     public void clear(String tableName) {
         validateTable(tableName);
-
-        data = new DataSet[1000];
-        freeIndex = 0;
+        data.clear();
     }
 
     @Override
     public void create(String tableName, DataSet input) {
         validateTable(tableName);
-
-        data[freeIndex] = input;
-        freeIndex++;
+        data.add(input);
     }
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        for (int index = 0; index < freeIndex; index++) {
-            if (data[index].get("id").equals(id)) {
-                data[index].updateFrom(newValue);
+        for (DataSet dataSet : data) {
+            if (dataSet.get("id").equals(id)) {
+                dataSet.updateFrom(newValue);
             }
         }
     }
