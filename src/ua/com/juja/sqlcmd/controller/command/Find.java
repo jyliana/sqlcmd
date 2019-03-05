@@ -1,9 +1,10 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import ua.com.juja.sqlcmd.controller.command.Command;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
+
+import java.util.Set;
 
 public class Find implements Command {
     private DatabaseManager manager;
@@ -25,7 +26,7 @@ public class Find implements Command {
         String tableName = data[1];
 
         DataSet[] tableData = manager.getTableData(tableName);
-        String[] tableColumns = manager.getTableColumns(tableName);
+        Set<String> tableColumns = manager.getTableColumns(tableName);
         printHeader(tableColumns);
         printTable(tableData);
     }
@@ -37,7 +38,7 @@ public class Find implements Command {
         view.write("--------------------------");
     }
 
-    private void printHeader(String[] tableColumns) {
+    private void printHeader(Set<String> tableColumns) {
         String result = " | ";
         for (String name : tableColumns) {
             result += name + " | ";

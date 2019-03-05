@@ -8,6 +8,9 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -27,8 +30,7 @@ public class FindTest {
     @Test
     public void testPrintTableData() {
         // given
-        Mockito.when(manager.getTableColumns("users"))
-                .thenReturn(new String[]{"id", "name", "password"});
+        setupTableColumns("users", "id", "name", "password");
 
         DataSet user1 = new DataSet();
         user1.put("id", 1);
@@ -56,10 +58,15 @@ public class FindTest {
                 "--------------------------]");
     }
 
+    private void setupTableColumns(String tableName, String... columns) {
+        Mockito.when(manager.getTableColumns(tableName))
+                .thenReturn(new LinkedHashSet<>(Arrays.asList(columns)));
+    }
+
     @Test
     public void testPrintTableDataWithOneColumn() {
         // given
-        Mockito.when(manager.getTableColumns("users")).thenReturn(new String[]{"id", "name", "password"});
+        setupTableColumns("users", "id", "name", "password");
 
         DataSet user1 = new DataSet();
         user1.put("id", 1);
@@ -124,8 +131,7 @@ public class FindTest {
     @Test
     public void testPrintEmptyTableData() {
         // given
-        Mockito.when(manager.getTableColumns("users"))
-                .thenReturn(new String[]{"id", "name", "password"});
+        setupTableColumns("users", "id", "name", "password");
 
         DataSet[] data = new DataSet[0];
         Mockito.when(manager.getTableData("users"))
