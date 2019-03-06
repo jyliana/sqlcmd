@@ -34,7 +34,7 @@ public abstract class DatabaseManagerTest {
         manager.clear("users");
 
         //when
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("name", "Stiven");
         input.put("password", "Pupkin");
         input.put("id", 1);
@@ -45,8 +45,8 @@ public abstract class DatabaseManagerTest {
         assertEquals(1, users.size());
 
         DataSet user = users.get(0);
-        assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
-        assertEquals("[Stiven, Pupkin, 1]", Arrays.toString(user.getValues()));
+        assertEquals("[name, password, id]", user.getNames().toString());
+        assertEquals("[Stiven, Pupkin, 1]", user.getValues().toString());
     }
 
     @Test
@@ -54,14 +54,14 @@ public abstract class DatabaseManagerTest {
         //given
         manager.clear("users");
 
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("name", "Stiven");
         input.put("password", "Pupkin");
         input.put("id", 1);
         manager.create("users", input);
 
         //when
-        DataSet newValue = new DataSet();
+        DataSet newValue = new DataSetImpl();
         newValue.put("password", "pass2");
         newValue.put("name", "Pup");
         manager.update("users", 1, newValue);
@@ -71,8 +71,8 @@ public abstract class DatabaseManagerTest {
         assertEquals(1, users.size());
 
         DataSet user = users.get(0);
-        assertEquals("[name, password, id]", Arrays.toString(user.getNames()));
-        assertEquals("[Pup, pass2, 1]", Arrays.toString(user.getValues()));
+        assertEquals("[name, password, id]", user.getNames().toString());
+        assertEquals("[Pup, pass2, 1]", user.getValues().toString());
     }
 
     @Test

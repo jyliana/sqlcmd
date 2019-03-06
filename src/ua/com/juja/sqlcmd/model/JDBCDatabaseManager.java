@@ -17,7 +17,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
             ResultSetMetaData rsmd = rs.getMetaData();
             while (rs.next()) {
-                DataSet dataSet = new DataSet();
+                DataSet dataSet = new DataSetImpl();
                 result.add(dataSet);
                 for (int i = 0; i <= rsmd.getColumnCount()-1; i++) {
                     dataSet.put(rsmd.getColumnName(i+1), rs.getObject(i+1));
