@@ -18,7 +18,7 @@ public class Tables implements Command {
 
     @Override
     public boolean canProcess(String command) {
-        return command.equals("list"); //TODO replace list with tables
+        return command.equals("tables");
     }
 
     @Override

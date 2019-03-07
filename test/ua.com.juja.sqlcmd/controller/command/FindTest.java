@@ -14,8 +14,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class FindTest {
     private View view;
@@ -143,5 +142,18 @@ public class FindTest {
                 "| id | name | password | , " +
                 "--------------------------, " +
                 "--------------------------]");
+    }
+
+    @Test
+    public void testErrorForBadCommandFormat() {
+        // when
+        try {
+            command.process("find|users|blabla");
+            fail("Expected exception");
+        } catch (IllegalArgumentException e) {
+            // then
+            assertEquals("Формат команды 'find|tableName', а получено find|users|blabla", e.getMessage());
+        }
+
     }
 }

@@ -54,7 +54,7 @@ public class IntegrationTest {
                 "Существующие команды: \r\n" +
                 "\tconnect|databaseName|userName|password\r\n" +
                 "\t\tдля подключения к базе данных, с которой будем работать\r\n" +
-                "\tlist\r\n" +
+                "\ttables\r\n" +
                 "\t\tдля получения списка всех таблиц базы, к которой подключились\r\n" +
                 "\tclear|tableName\r\n" +
                 "\t\tдля очистки всей таблицы\r\n" +
@@ -89,7 +89,7 @@ public class IntegrationTest {
     @Test
     public void testListWithoutConnect() {
         //given
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -98,7 +98,7 @@ public class IntegrationTest {
         //then
         assertEquals("Привет, юзер!\r\n" +
                 "Введи, пожалуйста, имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
-                "Вы не можете пользоваться командой 'list', пока не подключитесь к базе с помощью команды connect|databaseName|userName|password\r\n" +
+                "Вы не можете пользоваться командой 'tables', пока не подключитесь к базе с помощью команды connect|databaseName|userName|password\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 "До скорой встречи!\r\n", getData());
     }
@@ -164,7 +164,7 @@ public class IntegrationTest {
     public void testListAfterConnect() {
         //given
         in.add("connect|sqlcmd|postgres|123456");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -176,7 +176,7 @@ public class IntegrationTest {
                 // connect
                 "Успешно подключились.\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
-                // list
+                // tables
                 "[news, users, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
@@ -213,9 +213,9 @@ public class IntegrationTest {
     public void testConnectAfterConnect() {
         //given
         in.add("connect|sqlcmd|postgres|123456");
-        in.add("list");
+        in.add("tables");
         in.add("connect|postgres|postgres|123456");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -227,13 +227,13 @@ public class IntegrationTest {
                 // connect
                 "Успешно подключились.\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
-                // list
+                // tables
                 "[news, users, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // connect to other DB
                 "Успешно подключились.\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
-                // list
+                // tables
                 "[test2]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 "До скорой встречи!\r\n", getData());
