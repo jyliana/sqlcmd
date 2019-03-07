@@ -1,26 +1,24 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
-    public static final String TABLE_NAME = "news, users, test";//TODO
-    private LinkedList<DataSet> data = new LinkedList<>();
+    private Map<String, List<DataSet>> tables = new LinkedHashMap<>();
 
     @Override
     public List<DataSet> getTableData(String tableName) {
-        validateTable(tableName);
-        return data;
+        return get(tableName);
     }
 
-    private void validateTable(String tableName) {
-        if (!"users".equals(tableName)) {
-            throw new UnsupportedOperationException("Only for 'users' table, but you try to work with: " + tableName);
-        }
+    @Override
+    public int getSize(String tableName) throws SQLException {
+        return get(tableName).size();
     }
 
     @Override
     public Set<String> getTablesNames() {
-        return new LinkedHashSet<>(Arrays.asList(TABLE_NAME));
+        return tables.keySet();
     }
 
     @Override
@@ -30,19 +28,24 @@ public class InMemoryDatabaseManager implements DatabaseManager {
 
     @Override
     public void clear(String tableName) {
-        validateTable(tableName);
-        data.clear();
+        get(tableName).clear();
+    }
+
+    private List<DataSet> get(String tableName) {
+        if (!tables.containsKey(tableName)) {
+            tables.put(tableName, new LinkedList<DataSet>());
+        }
+        return tables.get(tableName);
     }
 
     @Override
     public void create(String tableName, DataSet input) {
-        validateTable(tableName);
-        data.add(input);
+        get(tableName).add(input);
     }
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        for (DataSet dataSet : data) {
+        for (DataSet dataSet : get(tableName)) {
             if (dataSet.get("id").equals(id)) {
                 dataSet.updateFrom(newValue);
             }

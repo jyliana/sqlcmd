@@ -3,7 +3,6 @@ package ua.com.juja.sqlcmd.model;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +23,15 @@ public abstract class DatabaseManagerTest {
 
     @Test
     public void testGetAllTablesNames() {
+        // given
+        manager.getTableData("news");
+        manager.getTableData("users");
+        manager.getTableData("test");
+
+        // when
         Set<String> tablesNames = manager.getTablesNames();
+
+        // then
         assertEquals("[news, users, test]", tablesNames.toString());
     }
 

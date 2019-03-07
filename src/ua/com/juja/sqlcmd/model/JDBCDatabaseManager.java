@@ -29,8 +29,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
             return result;
         }
     }
-
-    private int getSize(String tableName) throws SQLException {
+@Override
+    public int getSize(String tableName) throws SQLException {
         try (Statement stmt = connection.createStatement();
              ResultSet rsCount = stmt.executeQuery("SELECT COUNT(*) FROM " + tableName)) {
             rsCount.next();
